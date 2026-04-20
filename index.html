@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Performance Lab | Paid Ads Profit Audit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E2C16E;
+      --gold-dark: #9E7A2A;
+      --black: #0C0C0C;
+      --off-black: #161616;
+      --surface: #1A1A1A;
+      --surface-2: #222222;
+      --white: #FFFFFF;
+      --off-white: #F5F4F0;
+      --text-muted: #999999;
+      --border: rgba(201,168,76,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 20px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(12,12,12,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--white);
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black);
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--gold-light); }
+
+    /* ── HERO ────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%),
+        var(--black);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(201,168,76,0.03) 0px,
+        rgba(201,168,76,0.03) 1px,
+        transparent 1px,
+        transparent 80px
+      );
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 780px; position: relative; }
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-dark);
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+      background: rgba(201,168,76,0.07);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--gold);
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: #BBBBBB;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+    .hero-cta-group {
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--black);
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      padding: 16px 36px;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 24px rgba(201,168,76,0.3);
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-secondary {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 16px 36px;
+      border-radius: 5px;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-proof {
+      margin-top: 52px;
+      display: flex; align-items: center; justify-content: center; gap: 32px; flex-wrap: wrap;
+    }
+    .proof-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.85rem; color: var(--text-muted);
+    }
+    .proof-item .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ── PROBLEM STRIP ───────────────────────────────── */
+    .problem-strip {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 24px;
+      text-align: center;
+    }
+    .problem-strip h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      color: var(--white);
+      max-width: 700px;
+      margin: 0 auto 16px;
+    }
+    .problem-strip p {
+      color: #AAAAAA;
+      font-size: 1rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── SECTION SHARED ──────────────────────────────── */
+    section { padding: 96px 24px; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      color: #AAAAAA;
+      font-size: 1rem;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* ── WHAT YOU GET ────────────────────────────────── */
+    .what-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 56px;
+    }
+    .what-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 36px 32px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .what-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .what-card .icon {
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      background: rgba(201,168,76,0.12);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+    }
+    .what-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .what-card p { color: #999; font-size: 0.92rem; line-height: 1.65; }
+
+    /* ── AUDIT PACKAGES ──────────────────────────────── */
+    .packages-bg { background: var(--off-black); }
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      margin-top: 56px;
+    }
+    .package-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 40px 36px;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .package-card.featured {
+      border-color: var(--gold);
+      background: linear-gradient(160deg, rgba(201,168,76,0.07) 0%, var(--surface) 60%);
+    }
+    .featured-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--black);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+    }
+    .package-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .package-desc { color: #999; font-size: 0.9rem; margin-bottom: 24px; }
+    .package-price {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .package-price span { font-size: 1rem; font-weight: 500; color: #777; }
+    .package-period { font-size: 0.8rem; color: #666; margin-bottom: 28px; }
+    .package-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+    .package-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.9rem;
+      color: #C0C0C0;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .package-features li:last-child { border-bottom: none; }
+    .package-features li::before {
+      content: '✓';
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .btn-package {
+      display: block;
+      text-align: center;
+      background: transparent;
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      padding: 14px;
+      border-radius: 5px;
+      text-decoration: none;
+      border: 1px solid var(--gold-dark);
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-package:hover { background: var(--gold); color: var(--black); }
+    .btn-package-primary {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+    }
+    .btn-package-primary:hover { background: var(--gold-light); color: var(--black); }
+
+    /* ── PROCESS ─────────────────────────────────────── */
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0;
+      margin-top: 56px;
+      position: relative;
+    }
+    .step {
+      padding: 32px 28px;
+      position: relative;
+      text-align: center;
+    }
+    .step-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid var(--gold-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin: 0 auto 20px;
+    }
+    .step h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .step p { color: #888; font-size: 0.88rem; line-height: 1.6; }
+
+    /* ── SOCIAL PROOF ────────────────────────────────── */
+    .proof-bg { background: var(--surface); }
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 56px;
+    }
+    .testimonial {
+      background: var(--off-black);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 36px 32px;
+    }
+    .stars { color: var(--gold); font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
+    .testimonial blockquote {
+      color: #D0D0D0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .author-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--gold-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; color: var(--black);
+      flex-shrink: 0;
+    }
+    .author-name { font-weight: 600; font-size: 0.9rem; color: var(--white); }
+    .author-title { font-size: 0.78rem; color: #666; }
+
+    /* ── STAT ROW ────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 56px;
+    }
+    .stat {
+      background: var(--off-black);
+      text-align: center;
+      padding: 40px 24px;
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label { font-size: 0.85rem; color: #777; }
+
+    /* ── FAQ ─────────────────────────────────────────── */
+    .faq-list { margin-top: 56px; max-width: 720px; }
+    .faq-item {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 28px 0;
+    }
+    .faq-item:first-child { border-top: 1px solid rgba(255,255,255,0.08); }
+    .faq-q {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .faq-a { color: #999; font-size: 0.92rem; line-height: 1.7; }
+
+    /* ── FINAL CTA ───────────────────────────────────── */
+    .final-cta {
+      text-align: center;
+      padding: 120px 24px;
+      background:
+        radial-gradient(ellipse 70% 70% at 50% 50%, rgba(201,168,76,0.07) 0%, transparent 70%),
+        var(--off-black);
+      border-top: 1px solid var(--border);
+    }
+    .final-cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      color: var(--white);
+      max-width: 680px;
+      margin: 0 auto 20px;
+      line-height: 1.15;
+    }
+    .final-cta h2 em { font-style: normal; color: var(--gold); }
+    .final-cta p {
+      color: #999;
+      max-width: 480px;
+      margin: 0 auto 40px;
+      font-size: 1rem;
+    }
+    .final-cta-note {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .footer-logo span { color: var(--gold); }
+    footer p { color: #444; font-size: 0.78rem; }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .hero-proof { gap: 16px; }
+      .step { padding: 24px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">The Performance <span>Lab</span></div>
+  <a href="https://buy.stripe.com/dRmfZga4ze1L0fF5ws7Re0d" class="nav-cta">Get Your Audit</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Paid Ads Profit Audit</div>
+    <h1>Your Ads Are Spending.<br/>Are They <em>Working</em>?</h1>
+    <p class="hero-sub">
+      We perform a forensic-level audit of your Meta or Google Ads account — identifying every pound of wasted budget and delivering a prioritised action plan you can act on immediately.
+    </p>
+    <div class="hero-cta-group">
+      <a href="https://buy.stripe.com/dRmfZga4ze1L0fF5ws7Re0d" class="btn-primary">Get My Audit Now →</a>
+      <a href="#packages" class="btn-secondary">See What's Included</a>
+    </div>
+    <div class="hero-proof">
+      <div class="proof-item"><span class="dot"></span>50+ audit checkpoints</div>
+      <div class="proof-item"><span class="dot"></span>Delivered in 5–7 business days</div>
+      <div class="proof-item"><span class="dot"></span>Meta &amp; Google Ads specialists</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM STRIP -->
+<div class="problem-strip">
+  <h2>Most businesses are losing 20–40% of their ad spend to waste they can't see.</h2>
+  <p>Misaligned targeting, broken tracking, poor campaign structure — the problems are hidden in plain sight. We find them.</p>
+</div>
+
+<!-- WHAT YOU GET -->
+<section>
+  <div class="container">
+    <div class="section-label">What's Included</div>
+    <h2 class="section-title">Not a vague report.<br/>A profit plan.</h2>
+    <p class="section-sub">Every audit is conducted personally — not by a template, not by a junior. You receive a clear, actionable breakdown of exactly what to fix and why.</p>
+    <div class="what-grid">
+      <div class="what-card">
+        <div class="icon">🔍</div>
+        <h3>Forensic Account Analysis</h3>
+        <p>We go through your full account structure — campaigns, ad sets, audiences, creatives — against 50+ performance checkpoints.</p>
+      </div>
+      <div class="what-card">
+        <div class="icon">💸</div>
+        <h3>Wasted Spend Identification</h3>
+        <p>We pinpoint exactly where your budget is leaking — overlapping audiences, low-quality placements, under-performing segments.</p>
+      </div>
+      <div class="what-card">
+        <div class="icon">📊</div>
+        <h3>Tracking &amp; Data Integrity</h3>
+        <p>Broken pixels, missing conversion events, attribution errors — we identify every gap that's causing you to make bad decisions with good money.</p>
+      </div>
+      <div class="what-card">
+        <div class="icon">🎯</div>
+        <h3>Prioritised Action Plan</h3>
+        <p>Every issue is ranked by impact. You get a clear list of exactly what to do first to see the fastest improvement in return on ad spend.</p>
+      </div>
+      <div class="what-card">
+        <div class="icon">📝</div>
+        <h3>Written Audit Report</h3>
+        <p>A comprehensive, jargon-free report you can share with your team, agency, or use to hold your current provider accountable.</p>
+      </div>
+      <div class="what-card">
+        <div class="icon">🚀</div>
+        <h3>Quick-Win Opportunities</h3>
+        <p>Beyond fixing problems, we identify untapped opportunities — audiences, bidding strategies, and creative angles — to increase performance fast.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGE -->
+<section class="packages-bg" id="packages">
+  <div class="container">
+    <div class="section-label">The Audit</div>
+    <h2 class="section-title">One offer. Total clarity.</h2>
+    <p class="section-sub">A full forensic audit of both your Meta and Google Ads accounts — delivered as one unified report with a clear, prioritised action plan.</p>
+
+    <div style="max-width: 560px; margin: 56px auto 0;">
+      <div class="package-card featured" style="text-align:left;">
+        <div class="featured-badge">Combined Meta &amp; Google Audit</div>
+        <h3 style="margin-top: 16px;">Paid Ads Profit Audit</h3>
+        <p class="package-desc">We audit both your Meta and Google Ads accounts across 50+ checkpoints, identify every dollar of wasted spend, and hand you a prioritised plan to fix it.</p>
+        <div class="package-price">$347</div>
+        <div class="package-period">one-time payment · both platforms included</div>
+        <ul class="package-features">
+          <li>Full Meta Ads forensic audit</li>
+          <li>Full Google Ads forensic audit</li>
+          <li>Wasted spend identification across both platforms</li>
+          <li>Tracking &amp; attribution integrity review</li>
+          <li>Cross-platform budget analysis</li>
+          <li>Unified prioritised action plan</li>
+          <li>Quick-win opportunities identified</li>
+          <li>Delivered in 5–7 business days</li>
+        </ul>
+        <a href="https://buy.stripe.com/dRmfZga4ze1L0fF5ws7Re0d" class="btn-package btn-package-primary" style="font-size:1rem; padding:16px;">Get My Profit Audit — $347</a>
+        <p style="text-align:center; margin-top:14px; font-size:0.78rem; color:#555;">No agency contract · Secure payment via Stripe · Read-only account access</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUIDE UPSELL -->
+<section id="guide">
+  <div class="container">
+    <div style="max-width: 860px; margin: 0 auto;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <div class="section-label" style="margin-bottom:0;">Not ready for the audit?</div>
+      </div>
+      <h2 class="section-title">Start with the essentials.</h2>
+      <p class="section-sub">Get our Google Ads Best Practice Guide — 10 high-impact actions you can implement today to stop wasting money and improve performance immediately.</p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-top: 48px;">
+        <!-- Guide visual -->
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 40px 36px; position: relative; overflow: hidden;">
+          <div style="position:absolute; top:0; right:0; width:120px; height:120px; background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%); border-radius:0 10px 0 0;"></div>
+          <div style="font-size:2.4rem; margin-bottom:16px;">📋</div>
+          <div style="font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">Digital Guide</div>
+          <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; color:var(--white); line-height:1.3; margin-bottom:8px;">Google Ads Best Practices:<br/>10 Fixes to Implement Now</div>
+          <div style="font-size:0.82rem; color:#666; margin-top:12px;">The Performance Lab · Digital Guide</div>
+        </div>
+
+        <!-- Guide details -->
+        <div>
+          <p style="color:#AAAAAA; font-size:0.95rem; line-height:1.7; margin-bottom:28px;">Most Google Ads accounts are leaking money in the same 10 places. This guide walks you through each one — what it is, why it matters, and exactly how to fix it without needing an expert.</p>
+          <ul class="package-features" style="margin-bottom:32px;">
+            <li>10 proven best practices, explained clearly</li>
+            <li>Actionable steps — no jargon, no fluff</li>
+            <li>Covers campaigns, bidding, keywords &amp; tracking</li>
+            <li>Written by paid ads specialists</li>
+            <li>Instant digital download</li>
+          </ul>
+          <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:20px;">
+            <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--gold);">$47</div>
+            <div style="font-size:0.85rem; color:#555;">one-time · instant access</div>
+          </div>
+          <a href="#guide-placeholder" class="btn-package" style="display:inline-block; text-align:center;">Get the Guide — $47</a>
+          <p style="margin-top:12px; font-size:0.75rem; color:#444;">Or go further — the full audit includes everything in this guide and more, applied directly to <em style="color:#666;">your</em> account.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section>
+  <div class="container">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">Simple. Fast. Actionable.</h2>
+    <p class="section-sub">From purchase to profit plan in under a week.</p>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h4>Purchase Your Audit</h4>
+        <p>Choose your package and complete your payment securely via Stripe.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h4>Grant Account Access</h4>
+        <p>We'll send a secure link to grant read-only access to your ad accounts. No passwords shared.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h4>We Audit Your Account</h4>
+        <p>Our team conducts a thorough review across 50+ checkpoints over 5–7 business days.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h4>Receive Your Report</h4>
+        <p>You get a clear, prioritised report with specific actions — and we're available to answer questions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="proof-bg">
+  <div class="container">
+    <div class="section-label">The Results</div>
+    <h2 class="section-title">Numbers that matter.</h2>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Audit checkpoints per account</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">5–7</div>
+        <div class="stat-label">Business days to delivery</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">20–40%</div>
+        <div class="stat-label">Typical wasted spend identified</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Platforms: Meta &amp; Google</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="container">
+    <div class="section-label">Client Results</div>
+    <h2 class="section-title">What business owners say.</h2>
+    <p class="section-sub">Results from e-commerce and lead generation businesses who stopped guessing and started knowing.</p>
+    <div class="proof-grid">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"We'd been running the same campaigns for 18 months. The audit showed we were wasting nearly $4,000/month on audiences that hadn't converted in over a year. Fixed it in a week."</blockquote>
+        <div class="testimonial-author">
+          <div class="author-avatar">JR</div>
+          <div>
+            <div class="author-name">James R.</div>
+            <div class="author-title">E-commerce founder, UK</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Our agency kept telling us performance was 'normal'. The Performance Lab found broken conversion tracking that had been misfiring for months. Our real CPA was 40% lower than reported."</blockquote>
+        <div class="testimonial-author">
+          <div class="author-avatar">SK</div>
+          <div>
+            <div class="author-name">Sarah K.</div>
+            <div class="author-title">Lead gen business, London</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I was skeptical of another audit service but this was different. They found opportunities I didn't know existed — within a month we'd cut spend by 30% and increased leads by 22%."</blockquote>
+        <div class="testimonial-author">
+          <div class="author-avatar">MT</div>
+          <div>
+            <div class="author-name">Mark T.</div>
+            <div class="author-title">Professional services, Manchester</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="packages-bg">
+  <div class="container">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Common questions.</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Do you need my passwords or login details?</div>
+        <p class="faq-a">No. We use Meta's Business Manager partner access and Google Ads manager account access — both are read-only and can be revoked at any time. Your account remains fully under your control.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if my accounts are small or I've just started?</div>
+        <p class="faq-a">Audits are valuable at any stage. In early accounts we focus on structural issues and tracking integrity; in mature accounts we focus on efficiency and waste. We'll tell you upfront if an audit isn't the right fit.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is this a sales pitch for an ongoing retainer?</div>
+        <p class="faq-a">No. The audit is a standalone deliverable. We do offer retainer services if you want ongoing support, but there is zero obligation — you'll never be pressured into anything.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How is this different from what my agency already does?</div>
+        <p class="faq-a">Agencies have an inherent conflict of interest — their revenue depends on you staying. We're independent. We have no reason to hide problems or downplay waste, because our only job is to find it.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What do I receive at the end?</div>
+        <p class="faq-a">A written audit report covering every issue found, ranked by impact, with specific recommended actions. It's designed to be actionable — whether you implement the changes yourself or hand it to your team or agency.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Stop paying for ads that<br/><em>aren't working for you.</em></h2>
+  <p>Get a forensic audit of your Meta or Google Ads account and a clear plan to recover your wasted spend — in under a week.</p>
+  <a href="https://buy.stripe.com/dRmfZga4ze1L0fF5ws7Re0d" class="btn-primary">Get My Audit Now →</a>
+  <div class="final-cta-note">Delivered in 5–7 business days · Secure payment via Stripe · No agency contract</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">The Performance <span>Lab</span></div>
+  <p>theperformancelabads.com · Paid Ads Profit Audits for Meta &amp; Google</p>
+</footer>
+
+</body>
+</html>
